@@ -35,4 +35,7 @@ export const env = {
   CORS_ORIGIN: process.env.CORS_ORIGIN || "*",
   EVALUATOR_CRON: process.env.EVALUATOR_CRON || "*/30 * * * * *",
   BINANCE_BASE_URL: process.env.BINANCE_BASE_URL || "https://api.binance.com",
+  BINANCE_FALLBACK_URLS: process.env.BINANCE_FALLBACK_URLS
+    ? process.env.BINANCE_FALLBACK_URLS.split(",").map((url) => url.trim())
+    : [],
 };
