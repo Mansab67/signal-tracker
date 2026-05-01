@@ -18,7 +18,7 @@ export function StatusBadge({ status }: { status: SignalStatus }) {
     <span
       className={cn(
         "inline-flex items-center gap-1.5 rounded-md border px-2 py-0.5 text-[10px] font-bold tracking-wider uppercase",
-        styles[status]
+        styles[status],
       )}
     >
       {status === "OPEN" && (
@@ -38,7 +38,7 @@ export function DirectionBadge({ direction }: { direction: Direction }) {
     <span
       className={cn(
         "inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-[11px] font-bold tracking-wider",
-        isBuy ? "bg-bull/15 text-bull" : "bg-bear/15 text-bear"
+        isBuy ? "bg-bull/15 text-bull" : "bg-bear/15 text-bear",
       )}
     >
       {isBuy ? "▲" : "▼"} {direction}

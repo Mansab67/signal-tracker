@@ -9,7 +9,10 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Dashboard — SignalTracker" },
-      { name: "description", content: "Live trading signals dashboard with auto-evaluation and ROI tracking." },
+      {
+        name: "description",
+        content: "Live trading signals dashboard with auto-evaluation and ROI tracking.",
+      },
     ],
   }),
 });

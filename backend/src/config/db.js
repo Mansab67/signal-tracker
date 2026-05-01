@@ -29,6 +29,6 @@ export async function connectDB() {
 }
 
 export function dbStatus() {
-  const states = ['disconnected', 'connected', 'connecting', 'disconnecting'];
-  return states[mongoose.connection.readyState] ?? 'unknown';
+  const states = ["disconnected", "connected", "connecting", "disconnecting"];
+  return states[mongoose.connection.readyState] ?? "unknown";
 }

@@ -1,15 +1,15 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 export const SIGNAL_STATUS = Object.freeze({
-  OPEN: 'OPEN',
-  TARGET_HIT: 'TARGET_HIT',
-  STOPLOSS_HIT: 'STOPLOSS_HIT',
-  EXPIRED: 'EXPIRED',
+  OPEN: "OPEN",
+  TARGET_HIT: "TARGET_HIT",
+  STOPLOSS_HIT: "STOPLOSS_HIT",
+  EXPIRED: "EXPIRED",
 });
 
 export const DIRECTION = Object.freeze({
-  BUY: 'BUY',
-  SELL: 'SELL',
+  BUY: "BUY",
+  SELL: "SELL",
 });
 
 const SignalSchema = new mongoose.Schema(
@@ -32,7 +32,7 @@ const SignalSchema = new mongoose.Schema(
     realized_at: { type: Date, default: null },
   },
   {
-    timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
+    timestamps: { createdAt: "created_at", updatedAt: "updated_at" },
     toJSON: {
       virtuals: true,
       transform: (_doc, ret) => {
@@ -42,10 +42,10 @@ const SignalSchema = new mongoose.Schema(
         return ret;
       },
     },
-  }
+  },
 );
 
 SignalSchema.index({ status: 1, expiry_time: 1 });
 SignalSchema.index({ created_at: -1 });
 
-export const Signal = mongoose.model('Signal', SignalSchema);
+export const Signal = mongoose.model("Signal", SignalSchema);

@@ -7,7 +7,10 @@ export const Route = createFileRoute("/signals/new")({
   head: () => ({
     meta: [
       { title: "New Signal — SignalTracker" },
-      { name: "description", content: "Create a new trading signal with direction-aware validation." },
+      {
+        name: "description",
+        content: "Create a new trading signal with direction-aware validation.",
+      },
     ],
   }),
 });

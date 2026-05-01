@@ -15,7 +15,7 @@ export function formatRoi(value: number | null | undefined): string {
 
 export function computeLiveRoi(
   signal: Pick<Signal, "direction" | "entry_price">,
-  currentPrice: number | null | undefined
+  currentPrice: number | null | undefined,
 ): number | null {
   if (currentPrice == null || !Number.isFinite(currentPrice) || !signal.entry_price) return null;
   const raw =

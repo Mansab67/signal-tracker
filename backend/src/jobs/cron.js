@@ -1,7 +1,7 @@
-import cron from 'node-cron';
-import { evaluateAllOpen } from '../services/signal.service.js';
-import { env } from '../config/env.js';
-import { logger } from '../utils/logger.js';
+import cron from "node-cron";
+import { evaluateAllOpen } from "../services/signal.service.js";
+import { env } from "../config/env.js";
+import { logger } from "../utils/logger.js";
 
 let task = null;
 let lastRun = null;
@@ -25,7 +25,7 @@ export function startEvaluatorCron() {
         logger.info(`[CRON] Evaluated ${result.evaluated}, transitioned ${result.transitioned}`);
       }
     } catch (err) {
-      logger.error('[CRON] Evaluator failed:', err.message);
+      logger.error("[CRON] Evaluator failed:", err.message);
     } finally {
       running = false;
     }

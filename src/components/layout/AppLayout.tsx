@@ -20,9 +20,7 @@ export function AppLayout({
           <div className="flex items-center justify-between h-full px-6 md:px-8">
             <div>
               <h1 className="font-display text-xl font-bold tracking-tight">{title}</h1>
-              {description && (
-                <p className="text-xs text-muted-foreground mt-0.5">{description}</p>
-              )}
+              {description && <p className="text-xs text-muted-foreground mt-0.5">{description}</p>}
             </div>
             <div className="flex items-center gap-3">{actions}</div>
           </div>

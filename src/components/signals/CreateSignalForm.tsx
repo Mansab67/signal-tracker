@@ -32,14 +32,30 @@ const schema = z
   .superRefine((data, ctx) => {
     if (data.direction === "BUY") {
       if (!(data.stop_loss < data.entry_price))
-        ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["stop_loss"], message: "BUY: stop loss must be below entry" });
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["stop_loss"],
+          message: "BUY: stop loss must be below entry",
+        });
       if (!(data.target_price > data.entry_price))
-        ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["target_price"], message: "BUY: target must be above entry" });
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["target_price"],
+          message: "BUY: target must be above entry",
+        });
     } else {
       if (!(data.stop_loss > data.entry_price))
-        ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["stop_loss"], message: "SELL: stop loss must be above entry" });
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["stop_loss"],
+          message: "SELL: stop loss must be above entry",
+        });
       if (!(data.target_price < data.entry_price))
-        ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["target_price"], message: "SELL: target must be below entry" });
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["target_price"],
+          message: "SELL: target must be below entry",
+        });
     }
     const entry = new Date(data.entry_time).getTime();
     const expiry = new Date(data.expiry_time).getTime();
@@ -48,7 +64,11 @@ const schema = z
       ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["entry_time"], message: "Invalid date" });
     } else {
       if (entry > now + 60_000)
-        ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["entry_time"], message: "Cannot be in the future" });
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["entry_time"],
+          message: "Cannot be in the future",
+        });
       if (entry < now - ONE_DAY_MS)
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
@@ -98,7 +118,9 @@ export function CreateSignalForm() {
   async function fetchLivePrice() {
     if (!symbol) return;
     try {
-      const r = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${symbol.toUpperCase()}`);
+      const r = await fetch(
+        `https://api.binance.com/api/v3/ticker/price?symbol=${symbol.toUpperCase()}`,
+      );
       if (!r.ok) throw new Error("Symbol not found on Binance");
       const j = await r.json();
       const p = parseFloat(j.price);
@@ -152,7 +174,7 @@ export function CreateSignalForm() {
               "flex items-center justify-center gap-2 rounded-lg border-2 px-4 py-3 font-bold transition-all",
               direction === "BUY"
                 ? "border-bull bg-bull/15 text-bull shadow-[var(--shadow-glow-bull)]"
-                : "border-border bg-surface text-muted-foreground hover:border-bull/50 hover:text-bull"
+                : "border-border bg-surface text-muted-foreground hover:border-bull/50 hover:text-bull",
             )}
           >
             <ArrowUpCircle className="h-5 w-5" /> BUY (Long)
@@ -164,7 +186,7 @@ export function CreateSignalForm() {
               "flex items-center justify-center gap-2 rounded-lg border-2 px-4 py-3 font-bold transition-all",
               direction === "SELL"
                 ? "border-bear bg-bear/15 text-bear shadow-[var(--shadow-glow-bear)]"
-                : "border-border bg-surface text-muted-foreground hover:border-bear/50 hover:text-bear"
+                : "border-border bg-surface text-muted-foreground hover:border-bear/50 hover:text-bear",
             )}
           >
             <ArrowDownCircle className="h-5 w-5" /> SELL (Short)
@@ -178,7 +200,9 @@ export function CreateSignalForm() {
         <div className="mt-1.5 flex gap-2">
           <Input
             id="symbol"
-            {...form.register("symbol", { onChange: (e) => (e.target.value = e.target.value.toUpperCase()) })}
+            {...form.register("symbol", {
+              onChange: (e) => (e.target.value = e.target.value.toUpperCase()),
+            })}
             placeholder="BTCUSDT"
             className="font-mono uppercase"
           />
@@ -226,13 +250,25 @@ export function CreateSignalForm() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <Label htmlFor="entry_time">Entry Time</Label>
-          <Input id="entry_time" type="datetime-local" {...form.register("entry_time")} className="mt-1.5" />
-          <p className="mt-1 text-[11px] text-muted-foreground">Up to 24 hours in the past allowed</p>
+          <Input
+            id="entry_time"
+            type="datetime-local"
+            {...form.register("entry_time")}
+            className="mt-1.5"
+          />
+          <p className="mt-1 text-[11px] text-muted-foreground">
+            Up to 24 hours in the past allowed
+          </p>
           <FieldError msg={form.formState.errors.entry_time?.message} />
         </div>
         <div>
           <Label htmlFor="expiry_time">Expiry Time</Label>
-          <Input id="expiry_time" type="datetime-local" {...form.register("expiry_time")} className="mt-1.5" />
+          <Input
+            id="expiry_time"
+            type="datetime-local"
+            {...form.register("expiry_time")}
+            className="mt-1.5"
+          />
           <p className="mt-1 text-[11px] text-muted-foreground">Must be after entry time</p>
           <FieldError msg={form.formState.errors.expiry_time?.message} />
         </div>
@@ -259,7 +295,9 @@ function PriceField({
   accent,
 }: {
   label: string;
-  register: ReturnType<typeof useForm<FormValues>["prototype"]["register"]> | ReturnType<ReturnType<typeof useForm<FormValues>>["register"]>;
+  register:
+    | ReturnType<(typeof useForm<FormValues>)["prototype"]["register"]>
+    | ReturnType<ReturnType<typeof useForm<FormValues>>["register"]>;
   error?: string;
   accent?: "bull" | "bear";
 }) {
@@ -274,7 +312,7 @@ function PriceField({
         className={cn(
           "mt-1.5 font-mono",
           accent === "bull" && "border-bull/30 focus-visible:ring-bull/30",
-          accent === "bear" && "border-bear/30 focus-visible:ring-bear/30"
+          accent === "bear" && "border-bear/30 focus-visible:ring-bear/30",
         )}
       />
       <FieldError msg={error} />

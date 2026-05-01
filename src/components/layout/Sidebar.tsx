@@ -35,7 +35,7 @@ export function Sidebar() {
                 "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
                 active
                   ? "bg-sidebar-accent text-sidebar-accent-foreground shadow-sm"
-                  : "text-muted-foreground hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground"
+                  : "text-muted-foreground hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground",
               )}
             >
               <Icon className="h-4 w-4" />
@@ -55,9 +55,7 @@ export function Sidebar() {
             </span>
             Live Binance feed
           </div>
-          <div className="mt-1 text-muted-foreground/70">
-            Auto-evaluation every 30s
-          </div>
+          <div className="mt-1 text-muted-foreground/70">Auto-evaluation every 30s</div>
         </div>
         <Link
           to="/documentation"

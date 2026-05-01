@@ -1,8 +1,8 @@
-import { createApp } from './app.js';
-import { connectDB } from './config/db.js';
-import { env } from './config/env.js';
-import { startEvaluatorCron, stopEvaluatorCron } from './jobs/cron.js';
-import { logger } from './utils/logger.js';
+import { createApp } from "./app.js";
+import { connectDB } from "./config/db.js";
+import { env } from "./config/env.js";
+import { startEvaluatorCron, stopEvaluatorCron } from "./jobs/cron.js";
+import { logger } from "./utils/logger.js";
 
 async function bootstrap() {
   await connectDB();
@@ -19,11 +19,11 @@ async function bootstrap() {
     server.close(() => process.exit(0));
     setTimeout(() => process.exit(1), 10_000).unref();
   };
-  process.on('SIGTERM', () => shutdown('SIGTERM'));
-  process.on('SIGINT', () => shutdown('SIGINT'));
+  process.on("SIGTERM", () => shutdown("SIGTERM"));
+  process.on("SIGINT", () => shutdown("SIGINT"));
 }
 
 bootstrap().catch((err) => {
-  logger.error('Boot failed:', err);
+  logger.error("Boot failed:", err);
   process.exit(1);
 });

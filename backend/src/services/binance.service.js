@@ -1,5 +1,5 @@
-import { env } from '../config/env.js';
-import { logger } from '../utils/logger.js';
+import { env } from "../config/env.js";
+import { logger } from "../utils/logger.js";
 
 const CACHE_TTL_MS = 5_000;
 const cache = new Map(); // symbol -> { price, ts }
@@ -17,7 +17,7 @@ export async function getPrice(symbol) {
   const url = `${env.BINANCE_BASE_URL}/api/v3/ticker/price?symbol=${encodeURIComponent(sym)}`;
   const res = await fetch(url);
   if (!res.ok) {
-    const body = await res.text().catch(() => '');
+    const body = await res.text().catch(() => "");
     throw new Error(`Binance error [${res.status}] for ${sym}: ${body.slice(0, 200)}`);
   }
   const data = await res.json();
@@ -50,7 +50,7 @@ export async function getPrices(symbols) {
         logger.warn(`Price fetch failed for ${s}: ${err.message}`);
         results[s] = null;
       }
-    })
+    }),
   );
   return results;
 }

@@ -1,7 +1,7 @@
-import { Signal, SIGNAL_STATUS } from '../models/Signal.js';
-import { getPrice, getPrices, symbolExists } from './binance.service.js';
-import { evaluateTransition, computeRoi } from './evaluator.service.js';
-import { logger } from '../utils/logger.js';
+import { Signal, SIGNAL_STATUS } from "../models/Signal.js";
+import { getPrice, getPrices, symbolExists } from "./binance.service.js";
+import { evaluateTransition, computeRoi } from "./evaluator.service.js";
+import { logger } from "../utils/logger.js";
 
 /** Create a new signal — assumes input has passed validator already. */
 export async function createSignal(input) {
@@ -10,7 +10,7 @@ export async function createSignal(input) {
   if (!exists) {
     const err = new Error(`Symbol ${symbol} not found on Binance`);
     err.status = 400;
-    err.details = [{ path: 'symbol', message: 'Symbol does not exist on Binance' }];
+    err.details = [{ path: "symbol", message: "Symbol does not exist on Binance" }];
     throw err;
   }
 
@@ -32,7 +32,7 @@ export async function listSignals(query) {
   if (query.symbol) filter.symbol = query.symbol.toUpperCase();
   if (query.direction) filter.direction = query.direction;
   const limit = query.limit ?? 100;
-  const sort = query.sort ?? '-created_at';
+  const sort = query.sort ?? "-created_at";
   return Signal.find(filter).sort(sort).limit(limit);
 }
 
@@ -74,11 +74,11 @@ export async function evaluateAndPersist(signal) {
   const updated = await Signal.findOneAndUpdate(
     { _id: signal._id, status: SIGNAL_STATUS.OPEN },
     { $set: next },
-    { new: true }
+    { new: true },
   );
   if (updated) {
     logger.info(
-      `Signal ${updated.id} ${updated.symbol} ${updated.direction} → ${next.status} @ ${next.realized_price} (ROI ${next.realized_roi}%)`
+      `Signal ${updated.id} ${updated.symbol} ${updated.direction} → ${next.status} @ ${next.realized_price} (ROI ${next.realized_roi}%)`,
     );
   }
   return updated ?? signal;
@@ -100,7 +100,7 @@ export async function evaluateAllOpen() {
     const updated = await Signal.findOneAndUpdate(
       { _id: sig._id, status: SIGNAL_STATUS.OPEN },
       { $set: next },
-      { new: true }
+      { new: true },
     );
     if (updated) {
       transitioned++;
@@ -112,7 +112,10 @@ export async function evaluateAllOpen() {
 
 /** Quick status poll — for /signals/:id/status */
 export async function getSignalStatus(id) {
-  const signal = await Signal.findById(id, 'status symbol direction entry_price realized_roi realized_price');
+  const signal = await Signal.findById(
+    id,
+    "status symbol direction entry_price realized_roi realized_price",
+  );
   if (!signal) return null;
   let current_price = null;
   let live_roi = signal.realized_roi;
