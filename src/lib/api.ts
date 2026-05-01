@@ -58,17 +58,17 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   if (res.status === 204) return undefined as T;
   const text = await res.text();
   const data = text ? JSON.parse(text) : null;
-   if (!res.ok) {
-     const err = new Error(
-       (data as ApiError)?.error || `Request failed (${res.status})`
-     ) as Error & {
-       status: number;
-       details?: { path: string; message: string }[];
-     };
-     err.status = res.status;
-     err.details = (data as ApiError)?.details;
-     throw err;
-   }
+  if (!res.ok) {
+    const err = new Error(
+      (data as ApiError)?.error || `Request failed '(${res.status})`,
+    ) as Error & {
+      status: number;
+      details?: { path: string; message: string }[];
+    };
+    err.status = res.status;
+    err.details = (data as ApiError)?.details;
+    throw err;
+  }
   return data as T;
 }
 
