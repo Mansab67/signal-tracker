@@ -8,7 +8,7 @@
 
 const BASE_URL =
   (import.meta.env.VITE_API_BASE_URL as string | undefined)?.replace(/\/$/, "") ||
-  "http://localhost:4000";
+  "https://signal-tracker-7j8d.onrender.com";
 
 export type SignalStatus = "OPEN" | "TARGET_HIT" | "STOPLOSS_HIT" | "EXPIRED";
 export type Direction = "BUY" | "SELL";
@@ -58,15 +58,17 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   if (res.status === 204) return undefined as T;
   const text = await res.text();
   const data = text ? JSON.parse(text) : null;
-  if (!res.ok) {
-    const err = new Error((data as ApiError)?.error || `Request failed (${res.status})`) as Error & {
-      status: number;
-      details?: { path: string; message: string }[];
-    };
-    err.status = res.status;
-    err.details = (data as ApiError)?.details;
-    throw err;
-  }
+   if (!res.ok) {
+     const err = new Error(
+       (data as ApiError)?.error || `Request failed (${res.status})`
+     ) as Error & {
+       status: number;
+       details?: { path: string; message: string }[];
+     };
+     err.status = res.status;
+     err.details = (data as ApiError)?.details;
+     throw err;
+   }
   return data as T;
 }
 
