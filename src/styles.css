@@ -51,10 +51,10 @@
   --background: oklch(0.16 0.018 254);
   --foreground: oklch(0.97 0.005 240);
 
-  --surface: oklch(0.20 0.020 254);
+  --surface: oklch(0.2 0.02 254);
   --surface-elevated: oklch(0.235 0.022 254);
 
-  --card: oklch(0.20 0.020 254);
+  --card: oklch(0.2 0.02 254);
   --card-foreground: oklch(0.97 0.005 240);
 
   --popover: oklch(0.21 0.022 254);
@@ -75,7 +75,7 @@
   --destructive: oklch(0.66 0.235 18);
   --destructive-foreground: oklch(0.98 0.005 240);
 
-  --border: oklch(0.30 0.025 254);
+  --border: oklch(0.3 0.025 254);
   --input: oklch(0.27 0.025 254);
   --ring: oklch(0.78 0.18 158);
 
@@ -90,9 +90,9 @@
   --chart-2: oklch(0.72 0.18 235);
   --chart-3: oklch(0.66 0.235 18);
   --chart-4: oklch(0.82 0.16 75);
-  --chart-5: oklch(0.65 0.20 295);
+  --chart-5: oklch(0.65 0.2 295);
 
-  --sidebar: oklch(0.18 0.020 254);
+  --sidebar: oklch(0.18 0.02 254);
   --sidebar-foreground: oklch(0.92 0.008 240);
   --sidebar-primary: oklch(0.78 0.18 158);
   --sidebar-primary-foreground: oklch(0.16 0.018 254);
@@ -111,13 +111,13 @@
   --color-sidebar-ring: var(--sidebar-ring);
 
   --gradient-primary: linear-gradient(135deg, oklch(0.78 0.18 158), oklch(0.72 0.18 200));
-  --gradient-bull: linear-gradient(135deg, oklch(0.78 0.18 158 / 0.20), oklch(0.78 0.18 158 / 0.02));
-  --gradient-bear: linear-gradient(135deg, oklch(0.66 0.235 18 / 0.20), oklch(0.66 0.235 18 / 0.02));
-  --gradient-surface: linear-gradient(180deg, oklch(0.22 0.022 254), oklch(0.19 0.020 254));
+  --gradient-bull: linear-gradient(135deg, oklch(0.78 0.18 158 / 0.2), oklch(0.78 0.18 158 / 0.02));
+  --gradient-bear: linear-gradient(135deg, oklch(0.66 0.235 18 / 0.2), oklch(0.66 0.235 18 / 0.02));
+  --gradient-surface: linear-gradient(180deg, oklch(0.22 0.022 254), oklch(0.19 0.02 254));
 
   --shadow-glow-bull: 0 0 32px oklch(0.78 0.18 158 / 0.25);
   --shadow-glow-bear: 0 0 32px oklch(0.66 0.235 18 / 0.25);
-  --shadow-card: 0 4px 20px oklch(0 0 0 / 0.30);
+  --shadow-card: 0 4px 20px oklch(0 0 0 / 0.3);
   --shadow-elevated: 0 10px 40px oklch(0 0 0 / 0.45);
 }
 
@@ -126,7 +126,8 @@
     border-color: var(--color-border);
   }
 
-  html, body {
+  html,
+  body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
@@ -141,15 +142,20 @@
     background-attachment: fixed;
   }
 
-  .font-mono { font-family: var(--font-mono); }
-  .font-display { font-family: var(--font-display); letter-spacing: -0.02em; }
+  .font-mono {
+    font-family: var(--font-mono);
+  }
+  .font-display {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
 }
 
 @layer utilities {
   .glass-panel {
     background: oklch(0.22 0.022 254 / 0.65);
     backdrop-filter: blur(12px);
-    border: 1px solid oklch(0.30 0.025 254 / 0.6);
+    border: 1px solid oklch(0.3 0.025 254 / 0.6);
   }
 
   .pulse-dot {
@@ -165,8 +171,14 @@
     animation: pulse-ring 1.8s ease-out infinite;
   }
   @keyframes pulse-ring {
-    0% { transform: scale(0.6); opacity: 0.6; }
-    100% { transform: scale(1.8); opacity: 0; }
+    0% {
+      transform: scale(0.6);
+      opacity: 0.6;
+    }
+    100% {
+      transform: scale(1.8);
+      opacity: 0;
+    }
   }
 
   .text-gradient-primary {
@@ -182,5 +194,6 @@
   font-style: normal;
   font-weight: 100 900;
   font-display: swap;
-  src: url("https://fonts.gstatic.com/s/inter/v18/UcCo3FwrK3iLTcvneQg7Ca725JhhKnOqk.woff2") format("woff2");
+  src: url("https://fonts.gstatic.com/s/inter/v18/UcCo3FwrK3iLTcvneQg7Ca725JhhKnOqk.woff2")
+    format("woff2");
 }

@@ -8,7 +8,7 @@
 
 const BASE_URL =
   (import.meta.env.VITE_API_BASE_URL as string | undefined)?.replace(/\/$/, "") ||
-  "https://signal-tracker-7j8d.onrender.com";
+  "http://localhost:4001";
 
 export type SignalStatus = "OPEN" | "TARGET_HIT" | "STOPLOSS_HIT" | "EXPIRED";
 export type Direction = "BUY" | "SELL";

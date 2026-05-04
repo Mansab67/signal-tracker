@@ -48,6 +48,7 @@ backend/
 ```
 
 ### Separation of concerns
+
 - **Controllers** — HTTP I/O only (parse req, call service, send res)
 - **Services** — business logic (evaluation, ROI, persistence)
 - **Models** — schema + DB constraints
@@ -57,17 +58,20 @@ backend/
 ## Setup
 
 ### 1. Install
+
 ```bash
 cd backend
 npm install
 ```
 
 ### 2. Configure env
+
 ```bash
 cp .env.example .env
 ```
 
 Edit `.env`:
+
 ```
 PORT=4000
 MONGO_URI=mongodb+srv://USER:PASS@cluster.mongodb.net/tradingapp
@@ -79,9 +83,11 @@ EVALUATOR_CRON=*/30 * * * * *
 > ⚠️ **Security:** rotate your MongoDB password immediately if you've shared it anywhere. Never commit `.env`.
 
 ### 3. Database
+
 MongoDB Atlas — no schema migrations needed. Mongoose creates the `signals` collection on first insert. Indexes are auto-built on boot.
 
 ### 4. Run
+
 ```bash
 npm run dev      # nodemon
 npm start        # production
@@ -94,7 +100,8 @@ Health: `GET /health`
 
 Base URL: `http://localhost:4000/api`
 
-### `POST /signals`  — create a signal
+### `POST /signals` — create a signal
+
 ```json
 {
   "symbol": "BTCUSDT",
@@ -106,7 +113,9 @@ Base URL: `http://localhost:4000/api`
   "expiry_time": "2026-05-02T08:00:00Z"
 }
 ```
+
 Validation:
+
 - `BUY`: stop_loss < entry_price < target_price
 - `SELL`: target_price < entry_price < stop_loss
 - `expiry_time > entry_time`
@@ -116,46 +125,57 @@ Validation:
 Returns: `201` + created signal.
 Errors: `400` with `{ error, details: [{path, message}] }`.
 
-### `GET /signals`  — list all signals
+### `GET /signals` — list all signals
+
 Query params (optional): `status`, `symbol`, `direction`, `limit` (default 100), `sort` (default `-created_at`)
 Returns: `200` + `{ data: [...], count }`
 
-### `GET /signals/:id`  — get single signal
+### `GET /signals/:id` — get single signal
+
 Returns: `200` + signal with **fresh live price + ROI computed on the fly**.
 Errors: `404` if not found.
 
-### `GET /signals/:id/status`  — quick status poll
+### `GET /signals/:id/status` — quick status poll
+
 Lightweight endpoint. Returns: `{ id, status, current_price, realized_roi }`.
 
 ### `DELETE /signals/:id`
+
 Returns: `204`.
 
 ### `GET /health`
+
 Returns: `{ status: "ok", db, uptime, evaluator }`.
 
 ## Business Logic
 
 ### Status transitions
+
 ```
 OPEN ──► TARGET_HIT     (BUY: price ≥ target | SELL: price ≤ target)
 OPEN ──► STOPLOSS_HIT   (BUY: price ≤ SL    | SELL: price ≥ SL)
 OPEN ──► EXPIRED        (now > expiry_time, no hit)
 ```
+
 Once any terminal state is set, status is **frozen**. The evaluator skips non-OPEN signals.
 
 ### ROI
+
 ```
 BUY:  (current − entry) / entry × 100
 SELL: (entry − current) / entry × 100
 ```
+
 Stored to 2 decimals at the moment of state transition. Live ROI also returned on read endpoints for OPEN signals.
 
 ### Cron worker
+
 Default: every 30 seconds. Pulls all OPEN signals, batches them by symbol, fetches Binance prices (1 call per unique symbol), and evaluates. Writes only on state change.
 
 ## Deployment
 
 ### Render.com (recommended)
+
 1. Push backend folder to its own GitHub repo
 2. Render → New Web Service → connect repo
 3. Build: `npm install` · Start: `npm start`
@@ -163,11 +183,13 @@ Default: every 30 seconds. Pulls all OPEN signals, batches them by symbol, fetch
 5. Deploy → copy the service URL
 
 ### Railway / Fly.io
+
 Same pattern — deploy as a Node service, set env vars.
 
 After deploy, set the frontend env var `VITE_API_BASE_URL` to your backend URL.
 
 ## Scaling notes
+
 - Binance has a 1200 req/min weight limit per IP. Cron batches by symbol so 100 OPEN signals across 5 symbols = 5 API calls per cycle.
 - For >1000 signals, switch the cron to a queue (BullMQ + Redis) and shard by symbol.
 - The evaluator is idempotent — safe to run multiple workers behind a leader-election lock.

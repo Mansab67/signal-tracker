@@ -3,6 +3,7 @@
 A comprehensive crypto trading signal tracking system with real-time price monitoring, automated signal evaluation, and intuitive UI.
 
 ## Table of Contents
+
 - [Overview](#overview)
 - [Architecture](#architecture)
 - [Backend Flow](#backend-flow)
@@ -56,6 +57,7 @@ HTTP Request → server.js → createApp() → Middleware Chain → Routes → C
 ### 2. Detailed Component Flow
 
 #### Server Initialization (`backend/src/server.js`)
+
 1. Connects to MongoDB via `connectDB()`
 2. Creates Express app via `createApp()`
 3. Starts HTTP server on configured port
@@ -63,6 +65,7 @@ HTTP Request → server.js → createApp() → Middleware Chain → Routes → C
 5. Sets up graceful shutdown handlers
 
 #### App Configuration (`backend/src/app.js`)
+
 1. Sets up security middleware (helmet, cors)
 2. Configures JSON body parsing with size limits
 3. Adds request logging (morgan)
@@ -71,7 +74,9 @@ HTTP Request → server.js → createApp() → Middleware Chain → Routes → C
 6. Attaches error handling middleware
 
 #### Routing (`backend/src/routes/signal.routes.js`)
+
 Maps HTTP methods to controller functions:
+
 - `POST /` → `ctrl.create` (create signal)
 - `GET /` → `ctrl.list` (list signals)
 - `GET /:id` → `ctrl.getById` (get signal by ID)
@@ -79,6 +84,7 @@ Maps HTTP methods to controller functions:
 - `DELETE /:id` → `ctrl.remove` (delete signal)
 
 #### Controllers (`backend/src/controllers/signal.controller.js`)
+
 1. Handle HTTP requests and responses
 2. Validate input using Zod schemas
 3. Call service layer functions
@@ -86,6 +92,7 @@ Maps HTTP methods to controller functions:
 5. Handle errors (validation, not found, server errors)
 
 #### Services (`backend/src/services/signal.service.js`)
+
 1. Contain business logic
 2. Interact with data models
 3. Perform data transformation
@@ -93,12 +100,14 @@ Maps HTTP methods to controller functions:
 5. Handle transactions and complex operations
 
 #### Models (`backend/src/models/Signal.js`)
+
 1. Define data structure and validation
 2. Handle database interactions (MongoDB/Mongoose)
 3. Contain schema definitions, indexes, and model methods
 4. Include instance methods and static methods
 
 #### Validation (`backend/src/validators/signal.validator.js`)
+
 1. Use Zod for schema validation
 2. Define schemas for:
    - Signal creation (`createSignalSchema`)
@@ -107,33 +116,39 @@ Maps HTTP methods to controller functions:
 3. Provide reusable validation logic
 
 #### Background Jobs (`backend/src/jobs/cron.js`)
+
 1. Start/stop evaluator cron job
 2. Process signals periodically
 3. Update signal statuses based on market data
 4. Interact with external services (Binance)
 
 #### External Services (`backend/src/services/`)
+
 1. `binance.service.js`: Interface with Binance API
 2. `evaluator.service.js`: Logic for evaluating signals
 
 ## Frontend Flow
 
 ### 1. Application Entry Point
+
 - Vite dev server or built assets
 - React router handles client-side routing via `src/router.tsx`
 
 ### 2. State Management
+
 - React hooks for local state (`useState`, `useEffect`)
 - Custom hooks for data fetching (`src/hooks/`)
 - Context API for global state (if implemented)
 
 ### 3. API Communication
+
 - `src/lib/api.ts`: Centralized API client
 - Wrapper around fetch with error handling
 - Type-safe API calls matching backend endpoints
 - Automatic base URL configuration via environment variables
 
 ### 4. Component Architecture
+
 - Reusable UI components in `src/components/ui/`
 - Page-specific components in route directories (`src/routes/`)
 - Signal-specific components in `src/components/signals/`
@@ -142,6 +157,7 @@ Maps HTTP methods to controller functions:
 ### 5. Key Frontend Flows
 
 #### Signal Creation Flow
+
 1. User navigates to "New Signal" page (`src/routes/signals.new.tsx`)
 2. Fills out form in `CreateSignalForm.tsx`
 3. Form submission triggers `api.createSignal()` call
@@ -149,6 +165,7 @@ Maps HTTP methods to controller functions:
 5. On error, displays validation errors via form state
 
 #### Signal Listing Flow
+
 1. User visits homepage (`src/routes/index.tsx`)
 2. Component mounts and fetches signals via `api.listSignals()`
 3. Displays loading state while fetching
@@ -158,6 +175,7 @@ Maps HTTP methods to controller functions:
 7. Auto-refresh mechanism for live data
 
 #### Signal Detail Flow
+
 1. User clicks on a signal in the table
 2. Navigates to signal detail view
 3. Fetches signal data via `api.getSignal(id)`
@@ -166,6 +184,7 @@ Maps HTTP methods to controller functions:
 6. Provides delete functionality with confirmation
 
 ### 6. UI Components
+
 - Built using shadcn/ui primitives
 - Responsive design for mobile/desktop
 - Toast notifications via sonner
@@ -176,6 +195,7 @@ Maps HTTP methods to controller functions:
 ## Getting Started
 
 ### Prerequisites
+
 - Node.js (v18+)
 - MongoDB Atlas account
 - Binance API access (for live prices)
@@ -183,6 +203,7 @@ Maps HTTP methods to controller functions:
 ### Installation
 
 #### Backend Setup
+
 ```bash
 cd backend
 npm install
@@ -194,6 +215,7 @@ npm start    # Production
 ```
 
 #### Frontend Setup
+
 ```bash
 cd ..
 npm install
@@ -203,6 +225,7 @@ npm run dev  # Starts Vite dev server
 ### Environment Variables
 
 #### Backend (`.env`)
+
 ```
 PORT=4000
 MONGO_URI=mongodb+srv://USER:PASS@cluster.mongodb.net/tradingapp
@@ -212,6 +235,7 @@ EVALUATOR_CRON=*/30 * * * * *
 ```
 
 #### Frontend (`.env` or Vite config)
+
 ```
 VITE_API_BASE_URL=http://localhost:4000/api
 ```
@@ -219,11 +243,13 @@ VITE_API_BASE_URL=http://localhost:4000/api
 ## API Documentation
 
 ### Base URL
+
 `http://localhost:4000/api`
 
 ### Endpoints
 
 #### Signals
+
 - `POST /signals` - Create a new signal
 - `GET /signals` - List all signals (with filtering)
 - `GET /signals/:id` - Get signal by ID
@@ -231,9 +257,11 @@ VITE_API_BASE_URL=http://localhost:4000/api
 - `DELETE /signals/:id` - Delete a signal
 
 #### Health
+
 - `GET /health` - Check API health status
 
 ### Signal Model
+
 ```javascript
 {
   id: string,
@@ -258,6 +286,7 @@ VITE_API_BASE_URL=http://localhost:4000/api
 ## Deployment
 
 ### Backend (Render.com recommended)
+
 1. Push backend to GitHub repo
 2. Render → New Web Service → connect repo
 3. Build: `npm install` · Start: `npm start`
@@ -265,6 +294,7 @@ VITE_API_BASE_URL=http://localhost:4000/api
 5. Deploy and copy service URL
 
 ### Frontend (Vercel/Netlify)
+
 1. Build: `npm run build`
 2. Deploy dist folder to static hosting
 3. Set `VITE_API_BASE_URL` to your backend URL
@@ -272,6 +302,7 @@ VITE_API_BASE_URL=http://localhost:4000/api
 ## Features
 
 ### Backend Features
+
 - ✅ Full CRUD for trading signals
 - ✅ Strict validation (Zod) with direction-aware rules
 - ✅ Live Binance price integration with caching
@@ -282,6 +313,7 @@ VITE_API_BASE_URL=http://localhost:4000/api
 - ✅ Clean MVC architecture
 
 ### Frontend Features
+
 - ✅ Modern React 18 + Vite setup
 - ✅ TypeScript for type safety
 - ✅ Responsive UI with shadcn/ui components
@@ -295,6 +327,7 @@ VITE_API_BASE_URL=http://localhost:4000/api
 ## Business Logic
 
 ### Status Transitions
+
 ```
 OPEN ──► TARGET_HIT     (BUY: price ≥ target | SELL: price ≤ target)
 OPEN ──► STOPLOSS_HIT   (BUY: price ≤ SL    | SELL: price ≥ SL)
@@ -304,13 +337,16 @@ OPEN ──► EXPIRED        (now > expiry_time, no hit)
 Once terminal state is set, status is frozen. Evaluator skips non-OPEN signals.
 
 ### ROI Calculation
+
 ```
 BUY:  (current − entry) / entry × 100
 SELL: (entry − current) / entry × 100
 ```
+
 Stored to 2 decimals at state transition. Live ROI returned for OPEN signals.
 
 ### Cron Worker
+
 - Default: every 30 seconds
 - Pulls all OPEN signals
 - Batches by symbol for efficient Binance API usage
@@ -329,6 +365,7 @@ Stored to 2 decimals at state transition. Live ROI returned for OPEN signals.
 ## Error Handling
 
 Centralized error handling with:
+
 - Validation errors (400) with detailed messages
 - Not found errors (404)
 - Server errors (500) with logging
@@ -356,4 +393,5 @@ Please follow existing code style and conventions.
 MIT License - see LICENSE file for details.
 
 ---
-*Signal Tracker Pro - Empowering traders with intelligent signal tracking*
+
+_Signal Tracker Pro - Empowering traders with intelligent signal tracking_

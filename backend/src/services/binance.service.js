@@ -41,7 +41,7 @@ export async function getPrice(symbol) {
       const url = `${baseUrl}/api/v3/ticker/price?symbol=${encodeURIComponent(sym)}`;
       logger.info(`[Binance] Trying ${baseUrl} for ${sym}`);
       const res = await fetch(url, { signal: AbortSignal.timeout(5000) });
-      
+
       if (!res.ok) {
         const body = await res.text().catch(() => "");
         const err = new Error(`Binance HTTP [${res.status}] for ${sym}: ${body.slice(0, 200)}`);
@@ -50,8 +50,9 @@ export async function getPrice(symbol) {
       }
       const data = await res.json();
       const price = parseFloat(data.price);
-      if (!Number.isFinite(price)) throw new Error(`Invalid price from ${baseUrl} for ${sym}: ${JSON.stringify(data)}`);
-      
+      if (!Number.isFinite(price))
+        throw new Error(`Invalid price from ${baseUrl} for ${sym}: ${JSON.stringify(data)}`);
+
       logger.info(`[Binance] Success: ${sym} = $${price} from ${baseUrl}`);
       cache.set(sym, { price, ts: now });
       return price;
